@@ -18,7 +18,7 @@
           clearable
           label="Mot de passe"
           type =  "password"
-          placeholder="Entrez votre mot de passe fdp"
+          placeholder="Entrez votre mot de passe "
         ></v-text-field>
 
         <br />

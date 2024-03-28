@@ -1,19 +1,14 @@
 <template>
+    <div>
     <NavbarComponent />
-    <div>
-        <h1>Medecin info</h1>
-    </div>
-    <div>
-
-        <v-toolbar border density="comfortable">
-        <v-col class="d-flex justify-space-around">
-            <v-btn>Consulter les rapports </v-btn>
-            <v-btn>Gérer le Médecin</v-btn>
-        </v-col>
-    </v-toolbar>
-    </div>
     <RechercheMedecinComponent/>
+    <v-container>
+        <ListeRapportsComponent v-show="isListeRapportsVisible" :key="maj" />
+        <FicheMedecinComponent v-show="isFicheMedVisible" :key="maj" />
+    </v-container>
+    </div>
 
+      
 
 </template>
 
@@ -23,7 +18,23 @@ import RechercheMedecinComponent from '@/components/RechercheMedecinComponent.vu
 import FicheMedecinComponent from '@/components/FicheMedecinComponent.vue';
 import ListeRapportsComponent from '@/components/ListeRapportsComponent.vue';
 
-export default{
-    components: { NavbarComponent, RechercheMedecinComponent }
+export default {
+    name: 'MedecinView',
+    data() {
+        return {
+            maj: 0,
+            isListeRapportsVisible: false,
+            isFicheMedVisible: false
+        }
+    },
+
+    components: {
+        NavbarComponent,
+        RechercheMedecinComponent,
+        FicheMedecinComponent,
+        ListeRapportsComponent
+    }
 }
+
+
 </script>

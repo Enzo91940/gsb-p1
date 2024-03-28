@@ -1,78 +1,82 @@
 <template>
-    <v-container>
-        <!--
-            Ici a chaque pression du clavier , l'action getLesMedecins va se déclencher
-            pour mettre à jour la liste en fonction de la saisie
-        -->
-        <v-text-field @keyup="getLesMedecins" label="Nom de medecin" v-model="nomMedecin">
-        </v-text-field>
+  <v-container>
+    <!-- Barre d'outils avec les boutons "Consulter les rapports" et "Gérer le Médecin" -->
+    <v-toolbar v-if="selectMedecin">
+      <v-col class="d-flex justify-space-around">
+  
 
-        <!--
-            Ensuite nous créons la v-card qui va afficher la liste des medecins trouvés.
-            Elle sera affichée que pendant une recherche (attribut isListVisible)
-            Chaque permettera de selectionner les informations du medecin choisi
+      <v-btn @click= "this.$parent.isFicheMedVisible = false, this.$parent.isListeRapportsVisible = true" >Consulter les rapports</v-btn>
+      <v-btn @click="this.$parent.isListeRapportsVisible = false, this.$parent.isFicheMedVisible = true ">Gérer le Médecin</v-btn>
+  
+      </v-col>
+    </v-toolbar>
 
-        -->
+    <br>
 
-        <v-card class="mx-auto">
-            <v-list v-show="isListVisible">
-            <v-list-item v-for="item in items" :key="item.id" :value="item.nom" 
-            @click="getInfos(item)">
-                {{ item.nom + " " + item.prenom}}
-                </v-list-item>
-            
-            </v-list>
-        </v-card>
+    <!-- Barre de recherche -->
+    <v-text-field @keyup="getLesMedecins" label="Nom de médecin" v-model="nomMedecin"></v-text-field>
+
+    <!-- Liste des médecins -->
+    <v-card class="mx-auto">
+      <v-list v-show="isListVisible">
+        <v-list-item v-for="item in items" :key="item.id" :value="item.nom" @click="getInfos(item)">
+          {{ item.nom + " " + item.prenom }}
+        </v-list-item>
+      </v-list>
+    </v-card>
+
+  </v-container>
 
 
-
-    </v-container>
+  
 </template>
 
 <script>
-export default{
-    name: 'RechercheMedecinComponent',
-    data(){
-        return{
-            idMedecin: '', // ID du medecin selectionné
-            nomMedecin: '', // Nom du medecin selectionné
-            items: [], //Liste qui va contenir les medecins trouvés
-            isListVisible: false, //Attribut pour la visibilité de la liste
-        }
-    },
-    methods:{
-        /*
-        Méthode qui va faire appel au DataService , afin de récupérer la liste de medecins
-        */
-       getLesMedecins(){
-        // À compléter
-        this.$store.state.DataService.getMedecins(this.nomMedecin)
+
+
+export default {
+  name: 'RechercheMedecinComponent',
+  data() {
+    return {
+      idMedecin: '',
+      nomMedecin: '',
+      items: [],
+      isListVisible: false,
+      item: '',
+      isNavMedVisible: false,
+      selectMedecin: null,
+    };
+  },
+
+  methods: {
+    getLesMedecins() {
+      console.log(this.nomMedecin);
+      this.$store.state.DataService.getMedecins(this.nomMedecin)
         .then(
-      (data)=>{
-        //Enregistrement dans le store, dans la varaible utilisateur
-        this.items = data;
-        this.isListVisible = true;
-        
-        
-      })
-      //on affiche la banière d'erreur
-      .catch(
-        (error)=>{
+          (data) => {
+            console.log(data);
+            this.items = data;
+            this.isListVisible = true;
+          })
+        .catch(
+          (error) => {
             console.log(error);
-          
-      })
-       },
-       /*
-        Fontion qui permet de récupérer les informations 
-        du médecin selectionné
-        */
-       getInfos(item){
-        this.nomMedecin = item.nom+" "+item.prenom+" ; "+item.id
-        this.isListVisible = false;
-        this.$store.state.medecin = item;
-        this.$parent.isListVisible = true;
-        //return this.$store.state.DataService.getMedecins(this.nomMedecin) ;
-       }
+          }
+        );
+        this.$parent.maj++;
+    },
+
+    getInfos(item) {
+      this.isListVisible = false;
+      this.selectMedecin = item;
+      this.nomMedecin = item.nom + " " + item.prenom + ": " + item.id;
+      this.$parent.isNavMedVisible = false;
+      this.$parent.FicheMedecin = false;
+      this.$store.state.medecin = item;
+      this.$parent.maj++;
     }
-}
+  },
+};
+      
+
 </script>

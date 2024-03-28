@@ -4,6 +4,7 @@ import AccueilView from '../views/AccueilView.vue'
 import MedecinView from '../views/MedecinView.vue'
 import RapportsView from '../views/RapportsView.vue'
 
+
 const routes = [
   {
     path: '/',
@@ -22,8 +23,20 @@ const routes = [
   },
   {
     path: '/Rapports',
-    name: 'Rapports',
+    name: 'Rapport',
     component: RapportsView
+  },
+  {
+    path: '/ListeRapports/:idMedecin',
+    name: 'Rapports',
+    component: MedecinView
+  },
+
+  {
+    path: '/FicheMedecin',
+    name: 'FicheMedecin',
+    component: MedecinView
+
   },
 
   {
@@ -34,6 +47,8 @@ const routes = [
     // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
   }
+
+  
 ]
 
 const router = createRouter({
